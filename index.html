@@ -75,6 +75,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             width: 100vw;
             height: 100vh;
             z-index: 10;
@@ -82,7 +83,6 @@
 
         #screen-area {
             position: relative;
-            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -93,7 +93,8 @@
         #bg-image {
             max-width: 100vw;
             max-height: calc(100vh - 80px);
-            object-fit: contain; 
+            width: auto;
+            height: auto;
             display: block;
             z-index: 1;
         }
@@ -130,7 +131,7 @@
         .zoom-anim {
             width: 100%; height: 100%;
             object-fit: contain; 
-            animation: zoomIn 0.8s ease-out forwards;
+            animation: zoomIn 1.5s ease-out forwards;
         }
 
         #ui-area {
@@ -309,23 +310,13 @@
             btnCircle.disabled = true;
             btnCross.disabled = true;
 
-            if (playerChoice === 'circle') {
-                await playAudioAsync(sndCircle);
-            } else {
-                await playAudioAsync(sndCross);
-            }
-
-            await wait(150);
-
             const isMultiple = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
-            
             let isCorrect = false;
             if (isMultiple) {
                 isCorrect = (playerChoice === 'circle');
             } else {
                 isCorrect = (playerChoice === 'cross');
             }
-
             if (isCorrect) correctCount++;
 
             animImg.className = '';
@@ -335,11 +326,15 @@
             void animImg.offsetWidth; 
             animImg.classList.add('zoom-anim');
 
+            const choiceAudio = playerChoice === 'circle' ? sndCircle : sndCross;
+            await playAudioAsync(choiceAudio);
+            await wait(150);
+
             const resultAudio = isCorrect ? sndCorrect : sndWrong;
 
             await Promise.all([
                 playAudioAsync(resultAudio),
-                wait(800)
+                wait(1200) 
             ]);
 
             await wait(200);
