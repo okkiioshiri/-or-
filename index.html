@@ -14,7 +14,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            flex-direction: column; /* 画面を縦に並べる */
+            flex-direction: column;
             background-color: #000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
@@ -24,20 +24,21 @@
         /* --- 上部：ゲーム画面エリア --- */
         #screen-area {
             position: relative;
-            flex: 1; /* 残りの高さをすべて使う */
+            flex: 1;
             width: 100%;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #fff; /* 画像の背景に合わせて調整（不要なら黒でも可） */
+            background-color: #000; /* 白い余白を削除 */
         }
 
         #bg-image {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: contain;
+            /* ★画像の縦横比を保ったまま、隙間なく画面を埋め尽くす設定 */
+            object-fit: cover; 
             z-index: 1;
         }
 
@@ -65,7 +66,7 @@
             transform: scale(0.1);
         }
 
-        /* --- アニメーション設定（速度を遅くしました） --- */
+        /* --- アニメーション設定 --- */
         @keyframes zoomIn {
             0% { opacity: 0; transform: scale(0.1); }
             100% { opacity: 1; transform: scale(1); }
@@ -73,8 +74,8 @@
 
         .zoom-anim {
             width: 100%; height: 100%;
-            object-fit: contain;
-            /* ここでアニメーションの時間を指定 (例: 0.8s = 0.8秒) */
+            /* ★迫ってくる画像も、隙間なく画面を埋め尽くす設定 */
+            object-fit: cover; 
             animation: zoomIn 0.8s ease-out forwards;
         }
 
@@ -82,11 +83,11 @@
         #ui-area {
             position: relative;
             height: 80px; /* 下部の黒い帯の高さ */
-            background-color: #000;
+            background-color: #000; /* 黒背景 */
             display: flex;
-            justify-content: center; /* ボタンを中央に配置 */
+            justify-content: center; 
             align-items: center;
-            flex-shrink: 0; /* 画面が縮んでもこのエリアは潰さない */
+            flex-shrink: 0; 
         }
 
         /* --- ボタン --- */
@@ -96,24 +97,24 @@
         }
 
         button {
-            width: 60px; /* ボタンのサイズ */
+            width: 60px;
             height: 60px;
             font-size: 2rem;
             font-weight: normal;
             color: #fff;
-            border: 3px solid #fff; /* 白い枠線 */
+            border: 3px solid #fff;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-bottom: 4px; /* 文字の位置を少し上に調整 */
+            padding-bottom: 4px;
             box-sizing: border-box;
             transition: transform 0.1s;
         }
 
-        #btn-circle { background-color: #ff4d4d; } /* 赤色 */
-        #btn-cross { background-color: #3399ff; } /* 青色 */
+        #btn-circle { background-color: #ff4d4d; }
+        #btn-cross { background-color: #3399ff; }
         
         button:active { transform: scale(0.9); }
         button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
@@ -121,7 +122,7 @@
         /* --- カウンター --- */
         #counter {
             position: absolute;
-            right: 40px; /* 右端からの距離 */
+            right: 40px; 
             color: #fff;
             font-size: 2rem;
             font-weight: bold;
@@ -134,8 +135,6 @@
     <!-- ==========================================
          【画面の骨組み】 (HTML)
     =========================================== -->
-    
-    <!-- 上部：ゲーム画面 -->
     <div id="screen-area">
         <img id="bg-image" src="" alt="背景">
         <div id="number-display">--</div>
@@ -145,7 +144,6 @@
         </div>
     </div>
 
-    <!-- 下部：UI固定エリア -->
     <div id="ui-area">
         <div id="button-container">
             <button id="btn-circle" onclick="answer('circle')">〇</button>
@@ -159,14 +157,12 @@
          【ゲームの動き】 (JavaScript)
     =========================================== -->
     <script>
-        // 【1. ゲームの基本設定】
         const GAME_CONFIG = {
-            maxQuestions: 100,        // 全問題数
-            waitTimeMs: 1500,         // 結果が表示されている時間（アニメーション終了後も含めて待機する時間）
-            numberMin: 1,             // 出題される数字の最小値
-            numberMax: 99,            // 出題される数字の最大値
+            maxQuestions: 100,        
+            waitTimeMs: 1500,         
+            numberMin: 1,             
+            numberMax: 99,            
             
-            // --- ファイル名設定 ---
             fileBg: 'image3.png',
             fileCorrect: 'image1.png',
             fileWrong: 'image2.png',
@@ -174,8 +170,6 @@
             audioWrong: 'OMG.mp3'
         };
 
-
-        // 【2. ゲームの準備】
         let currentQuestion = 1;
         let currentNumber = 0;
         let isAnimating = false; 
@@ -198,8 +192,6 @@
             updateCounter();
         };
 
-
-        // 【3. 機能ごとのプログラム】
         function generateNumber() {
             const min = GAME_CONFIG.numberMin;
             const max = GAME_CONFIG.numberMax;
@@ -221,8 +213,6 @@
             }
         }
 
-
-        // 【4. ボタンが押されたときのメイン処理】
         function answer(playerChoice) {
             if (isAnimating) return; 
             isAnimating = true;
