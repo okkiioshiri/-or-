@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2の倍数or3の倍数 100本ノック</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000; /* 余白ができる場合はここが黒になります */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 基本の背景 (image3) */
+        #bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ★画面全体に収まるように変更★ */
+            z-index: 1;
+        }
+
+        /* 出題される数字 */
+        #number-display {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            font-size: 15vw;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000, 0 0 20px #000, 4px 4px 0 #000;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        #anim-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        #anim-img {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+
+        /* --- 正解(image1)・不正解(image2)のアニメーション --- */
+        @keyframes zoomIn {
+            0% { opacity: 0; transform: scale(0.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .zoom-anim {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ★画面全体に収まるように変更★ */
+            animation: zoomIn 0.4s ease-out forwards;
+        }
+
+        /* UI */
+        #counter {
+            position: absolute;
+            bottom: 8%;
+            right: 12%;
+            z-index: 4;
+            color: white;
+            font-size: 5vw;
+            font-weight: 300;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            letter-spacing: 2px;
+        }
+
+        #button-container {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            display: flex;
+            gap: 40px;
+        }
+
+        button {
+            width: 120px;
+            height: 120px;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #fff;
+            border: 4px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            transition: transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #btn-circle { background-color: #ff4757; }
+        #btn-cross { background-color: #1e90ff; }
+
+        button:active { transform: scale(0.9); }
+        button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <img id="bg-image" src="image3.png" alt="背景">
+    <div id="number-display">--</div>
+    
+    <div id="anim-container">
+        <img id="anim-img" src="" alt="">
+    </div>
+
+    <div id="counter"><span id="current-q">1</span> / 100</div>
+
+    <div id="button-container">
+        <button id="btn-circle" onclick="answer('circle')">〇</button>
+        <button id="btn-cross" onclick="answer('cross')">✕</button>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    const maxQuestions = 100;
+    let isAnimating = false;
+    let currentNumber = 0;
+    
+    const currentQText = document.getElementById('current-q');
+    const numberDisplay = document.getElementById('number-display');
+    const animImg = document.getElementById('anim-img');
+    const btnCircle = document.getElementById('btn-circle');
+    const btnCross = document.getElementById('btn-cross');
+
+    window.onload = () => {
+        generateNumber();
+        updateCounter();
+    };
+
+    function generateNumber() {
+        currentNumber = Math.floor(Math.random() * 99) + 1;
+        numberDisplay.textContent = currentNumber;
+    }
+
+    function updateCounter() {
+        currentQText.textContent = currentQuestion;
+    }
+
+    function answer(playerChoice) {
+        if (isAnimating) return;
+        isAnimating = true;
+        btnCircle.disabled = true;
+        btnCross.disabled = true;
+
+        let isCorrect = false;
+
+        if (currentNumber % 2 === 0 || currentNumber % 3 === 0) {
+            if (playerChoice === 'circle') {
+                isCorrect = true;
+            } else {
+                isCorrect = false;
+            }
+        } else {
+            if (playerChoice === 'cross') {
+                isCorrect = true;
+            } else {
+                isCorrect = false;
+            }
+        }
+
+        animImg.className = '';
+        animImg.style.opacity = 0;
+
+        if (isCorrect) {
+            animImg.src = 'image1.png';
+        } else {
+            animImg.src = 'image2.png';
+        }
+
+        void animImg.offsetWidth; 
+        animImg.classList.add('zoom-anim');
+
+        setTimeout(() => {
+            animImg.className = '';
+            animImg.style.opacity = 0;
+
+            if (currentQuestion < maxQuestions) {
+                currentQuestion++;
+                updateCounter();
+                generateNumber();
+                
+                isAnimating = false;
+                btnCircle.disabled = false;
+                btnCross.disabled = false;
+            } else {
+                alert("100問達成お疲れ様でした！");
+                currentQuestion = 1;
+                updateCounter();
+                generateNumber();
+                
+                isAnimating = false;
+                btnCircle.disabled = false;
+                btnCross.disabled = false;
+            }
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
