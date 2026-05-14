@@ -7,27 +7,32 @@
     
     <!-- ==========================================
          【デザイン設定】 (CSS)
-         画面の見た目やアニメーションを設定しています
     =========================================== -->
     <style>
+        /* --- 画面全体のレイアウト --- */
         body {
             margin: 0;
-            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* 画面を縦に並べる */
             background-color: #000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
+            overflow: hidden;
         }
 
-        #game-container {
+        /* --- 上部：ゲーム画面エリア --- */
+        #screen-area {
             position: relative;
-            width: 100vw;
-            height: 100vh;
+            flex: 1; /* 残りの高さをすべて使う */
+            width: 100%;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #fff; /* 画像の背景に合わせて調整（不要なら黒でも可） */
         }
 
-        /* --- 背景 --- */
         #bg-image {
             position: absolute;
             top: 0; left: 0;
@@ -36,11 +41,8 @@
             z-index: 1;
         }
 
-        /* --- 出題される数字 --- */
         #number-display {
             position: absolute;
-            top: 45%; left: 50%;
-            transform: translate(-50%, -50%);
             z-index: 2;
             font-size: 15vw;
             font-weight: bold;
@@ -48,7 +50,6 @@
             text-shadow: 0 0 10px #000, 0 0 20px #000, 4px 4px 0 #000;
         }
 
-        /* --- 迫ってくる画像 (正解/不正解) --- */
         #anim-container {
             position: absolute;
             top: 0; left: 0;
@@ -64,6 +65,7 @@
             transform: scale(0.1);
         }
 
+        /* --- アニメーション設定（速度を遅くしました） --- */
         @keyframes zoomIn {
             0% { opacity: 0; transform: scale(0.1); }
             100% { opacity: 1; transform: scale(1); }
@@ -72,98 +74,112 @@
         .zoom-anim {
             width: 100%; height: 100%;
             object-fit: contain;
-            animation: zoomIn 0.4s ease-out forwards;
+            /* ここでアニメーションの時間を指定 (例: 0.8s = 0.8秒) */
+            animation: zoomIn 0.8s ease-out forwards;
         }
 
-        /* --- カウンターとボタン --- */
-        #counter {
-            position: absolute;
-            bottom: 8%; right: 12%;
-            z-index: 4;
-            color: white;
-            font-size: 5vw;
-            font-weight: bold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        #button-container {
-            position: absolute;
-            bottom: 5%; left: 50%;
-            transform: translateX(-50%);
-            z-index: 4;
+        /* --- 下部：UI（操作）エリア --- */
+        #ui-area {
+            position: relative;
+            height: 80px; /* 下部の黒い帯の高さ */
+            background-color: #000;
             display: flex;
-            gap: 40px;
+            justify-content: center; /* ボタンを中央に配置 */
+            align-items: center;
+            flex-shrink: 0; /* 画面が縮んでもこのエリアは潰さない */
+        }
+
+        /* --- ボタン --- */
+        #button-container {
+            display: flex;
+            gap: 20px;
         }
 
         button {
-            width: 120px; height: 120px;
-            font-size: 3.5rem; font-weight: bold; color: #fff;
-            border: 4px solid #fff; border-radius: 50%;
+            width: 60px; /* ボタンのサイズ */
+            height: 60px;
+            font-size: 2rem;
+            font-weight: normal;
+            color: #fff;
+            border: 3px solid #fff; /* 白い枠線 */
+            border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 4px; /* 文字の位置を少し上に調整 */
+            box-sizing: border-box;
             transition: transform 0.1s;
         }
 
-        #btn-circle { background-color: #ff4757; }
-        #btn-cross { background-color: #1e90ff; }
+        #btn-circle { background-color: #ff4d4d; } /* 赤色 */
+        #btn-cross { background-color: #3399ff; } /* 青色 */
+        
         button:active { transform: scale(0.9); }
         button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
+
+        /* --- カウンター --- */
+        #counter {
+            position: absolute;
+            right: 40px; /* 右端からの距離 */
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
     <!-- ==========================================
          【画面の骨組み】 (HTML)
-         画面に表示する部品を配置しています
     =========================================== -->
-    <div id="game-container">
+    
+    <!-- 上部：ゲーム画面 -->
+    <div id="screen-area">
         <img id="bg-image" src="" alt="背景">
         <div id="number-display">--</div>
         
         <div id="anim-container">
             <img id="anim-img" src="" alt="">
         </div>
+    </div>
 
-        <div id="counter"><span id="current-q">1</span> / <span id="max-q">100</span></div>
-
+    <!-- 下部：UI固定エリア -->
+    <div id="ui-area">
         <div id="button-container">
             <button id="btn-circle" onclick="answer('circle')">〇</button>
             <button id="btn-cross" onclick="answer('cross')">✕</button>
         </div>
+        
+        <div id="counter"><span id="current-q">1</span> / <span id="max-q">100</span></div>
     </div>
 
     <!-- ==========================================
          【ゲームの動き】 (JavaScript)
-         判定やアニメーション、音声再生を処理します
     =========================================== -->
     <script>
-        // ★★★★★★★★★★★★★★★★★★★★★★★★★
         // 【1. ゲームの基本設定】
-        // 画像や音声を変えたい場合はここを修正してください
-        // ★★★★★★★★★★★★★★★★★★★★★★★★★
         const GAME_CONFIG = {
             maxQuestions: 100,        // 全問題数
-            waitTimeMs: 1500,         // 結果が表示されている時間（ミリ秒。1500 = 1.5秒）
+            waitTimeMs: 1500,         // 結果が表示されている時間（アニメーション終了後も含めて待機する時間）
             numberMin: 1,             // 出題される数字の最小値
             numberMax: 99,            // 出題される数字の最大値
             
             // --- ファイル名設定 ---
-            fileBg: 'image3.png',         // 背景画像
-            fileCorrect: 'image2.png',    // 正解時の画像
-            fileWrong: 'image1.png',      // 不正解時の画像
-            audioCorrect: 'YES.mp3',      // 正解時の音声ファイル
-            audioWrong: 'OMG.mp3'         // 不正解時の音声ファイル
+            fileBg: 'image3.png',
+            fileCorrect: 'image1.png',
+            fileWrong: 'image2.png',
+            audioCorrect: 'YES.mp3',
+            audioWrong: 'OMG.mp3'
         };
 
 
-        // ==========================================
-        // 【2. ゲームの準備（裏側の処理）】
-        // ==========================================
+        // 【2. ゲームの準備】
         let currentQuestion = 1;
         let currentNumber = 0;
-        let isAnimating = false; // 演出中のボタン連打防止フラグ
+        let isAnimating = false; 
 
-        // 画面の部品を取得
         const currentQText = document.getElementById('current-q');
         const maxQText = document.getElementById('max-q');
         const numberDisplay = document.getElementById('number-display');
@@ -171,26 +187,19 @@
         const btnCircle = document.getElementById('btn-circle');
         const btnCross = document.getElementById('btn-cross');
         
-        // 背景画像と最大問題数をセット
         document.getElementById('bg-image').src = GAME_CONFIG.fileBg;
         maxQText.textContent = GAME_CONFIG.maxQuestions;
 
-        // 音声データを読み込む
         const sndYes = new Audio(GAME_CONFIG.audioCorrect);
         const sndOmg = new Audio(GAME_CONFIG.audioWrong);
 
-        // 画面が読み込まれたら最初の問題を出す
         window.onload = () => {
             generateNumber();
             updateCounter();
         };
 
 
-        // ==========================================
         // 【3. 機能ごとのプログラム】
-        // ==========================================
-
-        // --- 数字をランダムに生成する ---
         function generateNumber() {
             const min = GAME_CONFIG.numberMin;
             const max = GAME_CONFIG.numberMax;
@@ -198,15 +207,13 @@
             numberDisplay.textContent = currentNumber;
         }
 
-        // --- カウンターを更新する ---
         function updateCounter() {
             currentQText.textContent = currentQuestion;
         }
 
-        // --- 音声を再生する ---
         function playSound(isCorrect) {
             if (isCorrect) {
-                sndYes.currentTime = 0; // 連続再生できるように巻き戻す
+                sndYes.currentTime = 0; 
                 sndYes.play().catch(e => console.log("音声再生エラー(正解):", e));
             } else {
                 sndOmg.currentTime = 0;
@@ -215,51 +222,41 @@
         }
 
 
-        // ==========================================
         // 【4. ボタンが押されたときのメイン処理】
-        // ==========================================
         function answer(playerChoice) {
-            if (isAnimating) return; // 演出中は操作を受け付けない
+            if (isAnimating) return; 
             isAnimating = true;
             btnCircle.disabled = true;
             btnCross.disabled = true;
 
-            // ① 「2の倍数」または「3の倍数」かどうかの判定
             const isMultiple = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
             
-            // ② プレイヤーが正解したかどうかの判定
             let isCorrect = false;
             if (isMultiple) {
-                // 倍数だった場合、「〇」を押していれば正解
                 isCorrect = (playerChoice === 'circle');
             } else {
-                // 倍数じゃなかった場合、「✕」を押していれば正解
                 isCorrect = (playerChoice === 'cross');
             }
 
-            // ③ 結果に合わせて画像と音声をセットして再生
             animImg.className = '';
             animImg.style.opacity = 0;
 
             if (isCorrect) {
                 animImg.src = GAME_CONFIG.fileCorrect;
-                playSound(true); // YES.mp3を再生
+                playSound(true); 
             } else {
                 animImg.src = GAME_CONFIG.fileWrong;
-                playSound(false); // OMG.mp3を再生
+                playSound(false); 
             }
 
-            // 画像のアニメーションを起動
             void animImg.offsetWidth; 
             animImg.classList.add('zoom-anim');
 
-            // ④ 一定時間（GAME_CONFIG.waitTimeMs）待ってから次の問題へ
             setTimeout(() => {
                 animImg.className = '';
                 animImg.style.opacity = 0;
 
                 if (currentQuestion < GAME_CONFIG.maxQuestions) {
-                    // 次の問題へ
                     currentQuestion++;
                     updateCounter();
                     generateNumber();
@@ -268,10 +265,8 @@
                     btnCircle.disabled = false;
                     btnCross.disabled = false;
                 } else {
-                    // 全問終了
                     alert(`${GAME_CONFIG.maxQuestions}問達成お疲れ様でした！`);
                     
-                    // リセットして最初から
                     currentQuestion = 1;
                     updateCounter();
                     generateNumber();
