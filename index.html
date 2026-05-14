@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2の倍数or3の倍数 100本ノック</title>
+    <title>しもやか ツーオアスリー</title>
     
     <style>
         body {
@@ -288,16 +288,16 @@
             startTime = Date.now();
             
             updateCounter();
-            await generateNumber();
+            generateNumber();
         }
 
-        async function generateNumber() {
+        function generateNumber() {
             const min = GAME_CONFIG.numberMin;
             const max = GAME_CONFIG.numberMax;
             currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
             numberDisplay.textContent = currentNumber;
             
-            await playAudioAsync(sndOh);
+            playAudioAsync(sndOh);
         }
 
         function updateCounter() {
@@ -337,15 +337,13 @@
                 wait(1200) 
             ]);
 
-            await wait(200);
-
             animImg.className = '';
             animImg.style.opacity = 0;
 
             if (currentQuestion < GAME_CONFIG.maxQuestions) {
                 currentQuestion++;
                 updateCounter();
-                await generateNumber();
+                generateNumber();
                 
                 isAnimating = false;
                 btnCircle.disabled = false;
