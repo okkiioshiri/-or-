@@ -3,106 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>しもやか ツーオアスリー</title>
+    <title>2の倍数or3の倍数 100本ノック</title>
     
     <style>
         body {
             margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
             overflow: hidden;
         }
 
+        #app {
+            width: 1280px;
+            height: 720px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+            background-color: #000;
+            overflow: hidden;
+        }
+
         .screen {
             position: absolute;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             background-color: #000;
         }
 
-        #title-screen {
+        #title-screen, #result-screen {
             cursor: pointer;
         }
 
         .hidden { display: none !important; }
 
-        .screen-bg {
-            max-width: 100vw;
-            max-height: 100vh;
+        .top-img-area {
+            position: relative;
+            width: 1280px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .top-img-area img.screen-bg, #bg-image {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-            position: absolute;
+            display: block;
             z-index: 1;
         }
 
+        .bottom-ui-area {
+            width: 1280px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            z-index: 10;
+        }
+
         #start-text {
-            position: absolute;
-            bottom: 5%;
-            z-index: 2;
             color: #fff;
-            font-size: clamp(1.5rem, 5vw, 3rem);
+            font-size: 40px;
             font-weight: bold;
             text-shadow: 2px 2px 4px #000;
         }
 
+        img.screen-bg-absolute {
+            width: 1280px;
+            height: 720px;
+            object-fit: contain;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+        }
+
         #result-content {
             position: absolute;
-            bottom: 30%;
+            bottom: 50px;
+            width: 100%;
             z-index: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
             color: #fff;
-            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-size: 30px;
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8), -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-        }
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', 'HG丸ｺﾞｼｯｸM-PRO', 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+        }        }
 
-        .text-yellow {
-            color: #ffeb3b;
-            font-weight: bold;
-        }
+        .text-yellow { color: #ffeb3b; font-weight: bold; }
 
         #game-wrapper {
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            width: 100vw;
-            height: 100vh;
+            width: 1280px;
+            height: 720px;
             z-index: 10;
         }
 
         #screen-area {
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #000; 
-            overflow: hidden;
-        }
-
-        #bg-image {
-            max-width: 100vw;
-            max-height: calc(100vh - 80px);
-            width: auto;
-            height: auto;
-            display: block;
-            z-index: 1;
         }
 
         #number-display {
             position: absolute;
             z-index: 2;
-            font-size: min(150px, 35vw);
+            font-size: 150px;
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
             font-weight: normal;
             color: #ffffff;
@@ -118,10 +135,7 @@
             pointer-events: none;
         }
 
-        #anim-img {
-            opacity: 0;
-            transform: scale(0.1);
-        }
+        #anim-img { opacity: 0; transform: scale(0.1); }
 
         @keyframes zoomIn {
             0% { opacity: 0; transform: scale(0.1); }
@@ -135,28 +149,24 @@
         }
 
         #ui-area {
-            position: relative;
-            height: 80px;
             width: 100%;
-            background-color: #000;
             display: flex;
             justify-content: center; 
             align-items: center;
-            flex-shrink: 0; 
         }
 
         #button-container {
             display: flex;
-            gap: 20px;
+            gap: 40px;
         }
 
         button {
-            width: 60px;
-            height: 60px;
-            font-size: 2rem;
-            font-weight: normal;
+            width: 100px;
+            height: 100px;
+            font-size: 28px;
+            font-weight: bold;
             color: #fff;
-            border: 3px solid #fff;
+            border: 4px solid #fff;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -175,69 +185,145 @@
 
         #counter {
             position: absolute;
-            right: 20px; 
+            bottom: 20px; 
+            right: 300px; 
             color: #fff;
-            font-size: 2rem;
-            font-weight: bold;
-            letter-spacing: 2px;
+            z-index: 5;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: normal;
         }
+
+        #current-q { font-size: 60px; transform: translateY(-30%); margin-right: -0.1em; }
+        #counter .slash { font-size: 100px; font-weight: 100; line-height: 1; }
+        #max-q { font-size: 40px; transform: translateY(35%); margin-left: -0.1em; }
+
+        #difficulty-modal {
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #222;
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .modal-content h2 { color: #fff; margin: 0; font-size: 40px; }
+        .diff-btn-container { display: flex; gap: 30px; }
+        .diff-btn {
+            width: 250px;
+            padding: 20px;
+            border-radius: 10px;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #btn-normal { background-color: #4CAF50; }
+        #btn-pro { background-color: #E91E63; }
+        .diff-title { font-size: 32px; font-weight: bold; }
+        .diff-desc { font-size: 18px; font-weight: normal; }
     </style>
 </head>
 <body>
 
-    <div id="title-screen" class="screen" onclick="startGame()">
-        <img src="title.png" class="screen-bg" alt="タイトル">
-        <div id="start-text">CLICK TO START</div>
-    </div>
-
-    <div id="game-wrapper" class="screen hidden">
-        <div id="screen-area">
-            <img id="bg-image" src="" alt="背景">
-            <div id="number-display">--</div>
-            
-            <div id="anim-container">
-                <img id="anim-img" src="" alt="">
+    <div id="app">
+        <div id="title-screen" class="screen" onclick="showDifficultyModal()">
+            <div class="top-img-area">
+                <img src="images/title.png" class="screen-bg" alt="タイトル">
+            </div>
+            <div class="bottom-ui-area">
+                <div id="start-text">CLICK TO START</div>
             </div>
         </div>
 
-        <div id="ui-area">
-            <div id="button-container">
-                <button id="btn-circle" onclick="answer('circle')">〇</button>
-                <button id="btn-cross" onclick="answer('cross')">✕</button>
+        <div id="difficulty-modal" class="screen hidden">
+            <div class="modal-content">
+                <h2>難易度を選択</h2>
+                <div class="diff-btn-container">
+                    <button id="btn-normal" class="diff-btn" onclick="startMode('normal')">
+                        <span class="diff-title">ノーマル</span>
+                        <span class="diff-desc">ランダム出題</span>
+                    </button>
+                    <button id="btn-pro" class="diff-btn" onclick="startMode('pro')">
+                        <span class="diff-title">プロ</span>
+                        <span class="diff-desc">奇数・引っかけ多め</span>
+                    </button>
+                </div>
             </div>
-            
-            <div id="counter"><span id="current-q">1</span> / <span id="max-q">100</span></div>
         </div>
-    </div>
 
-    <div id="result-screen" class="screen hidden" onclick="location.reload()">
-        <img src="result.png" class="screen-bg" alt="リザルト">
-        <div id="result-content">
-            <div id="best-score-label" class="text-yellow hidden">ベストスコア</div>
-            <div>あなたのレコード</div>
-            <div>正解数：<span id="res-correct">0</span></div>
-            <div id="res-time">0時間 0分 0秒</div>
-            <div>取得した日時：</div>
-            <div id="res-date"></div>
+        <div id="game-wrapper" class="screen hidden">
+            <div class="top-img-area" id="screen-area">
+                <img id="bg-image" src="" alt="背景">
+                <div id="number-display">--</div>
+                
+                <div id="anim-container">
+                    <img id="anim-img" src="" alt="">
+                </div>
+
+                <div id="counter">
+                    <span id="current-q">1</span>
+                    <span class="slash">/</span>
+                    <span id="max-q">100</span>
+                </div>
+            </div>
+
+            <div class="bottom-ui-area" id="ui-area">
+                <div id="button-container">
+                    <button id="btn-circle" onclick="answer('yes')">YES</button>
+                    <button id="btn-cross" onclick="answer('no')">NO</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen hidden" onclick="location.reload()">
+            <img src="images/result.png" class="screen-bg-absolute" alt="リザルト">
+            <div id="result-content">
+                <div id="res-mode" class="text-yellow"></div>
+                <div id="best-score-label" class="text-yellow hidden">ベストスコア更新！</div>
+                <div>あなたのレコード</div>
+                <div>正解数：<span id="res-correct">0</span></div>
+                <div id="res-time">0時間 0分 0秒</div>
+                <div>取得した日時：</div>
+                <div id="res-date"></div>
+            </div>
         </div>
     </div>
 
     <script>
+        function resizeApp() {
+            const app = document.getElementById('app');
+            const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+            app.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        }
+        window.addEventListener('resize', resizeApp);
+        document.addEventListener('DOMContentLoaded', resizeApp);
+
         const GAME_CONFIG = {
             maxQuestions: 100,        
             numberMin: 1,             
             numberMax: 99,            
             
-            fileBg: 'image3.png',
-            fileCorrect: 'image1.png',
-            fileWrong: 'image2.png',
+            fileBg: 'images/bg.png',
+            fileCorrect: 'images/YES.png',
+            fileWrong: 'images/NO.png',
             
-            audioOh: 'Oh.mp3',
-            audioCircle: 'YES.mp3',
-            audioCross: 'NO.mp3',
-            audioCorrect: 'OK.mp3',
-            audioWrong: 'OMG.mp3',
-            audioHakusyu: 'hakusyu.mp3'
+            audioOh: 'sounds/Oh.mp3',
+            audioCircle: 'sounds/YES.mp3',
+            audioCross: 'sounds/NO.mp3',
+            audioCorrect: 'sounds/OK.mp3',
+            audioWrong: 'sounds/OMG.mp3',
+            audioHakusyu: 'sounds/hakusyu.mp3'
         };
 
         let currentQuestion = 1;
@@ -246,6 +332,7 @@
         
         let correctCount = 0;
         let startTime = 0;
+        let currentMode = 'normal';
 
         const currentQText = document.getElementById('current-q');
         const maxQText = document.getElementById('max-q');
@@ -273,13 +360,19 @@
                 audioObj.currentTime = 0;
                 audioObj.onended = resolve;
                 audioObj.play().catch(e => {
-                    console.log("Audio play error:", e);
                     resolve();
                 });
             });
         }
 
-        async function startGame() {
+        function showDifficultyModal() {
+            document.getElementById('title-screen').onclick = null;
+            document.getElementById('difficulty-modal').classList.remove('hidden');
+        }
+
+        async function startMode(mode) {
+            currentMode = mode;
+            document.getElementById('difficulty-modal').classList.add('hidden');
             document.getElementById('title-screen').classList.add('hidden');
             document.getElementById('game-wrapper').classList.remove('hidden');
             
@@ -292,11 +385,24 @@
         }
 
         function generateNumber() {
-            const min = GAME_CONFIG.numberMin;
-            const max = GAME_CONFIG.numberMax;
-            currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-            numberDisplay.textContent = currentNumber;
+            if (currentMode === 'pro') {
+                const r = Math.random();
+                let pool = [];
+                if (r < 0.1) {
+                    pool = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98];
+                } else if (r < 0.55) {
+                    pool = [3,9,15,21,27,33,39,45,51,57,63,69,75,81,87,93,99];
+                } else {
+                    pool = [1,5,7,11,13,17,19,23,25,29,31,35,37,41,43,47,49,53,55,59,61,65,67,71,73,77,79,83,85,89,91,95,97];
+                }
+                currentNumber = pool[Math.floor(Math.random() * pool.length)];
+            } else {
+                const min = GAME_CONFIG.numberMin;
+                const max = GAME_CONFIG.numberMax;
+                currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            }
             
+            numberDisplay.textContent = currentNumber;
             playAudioAsync(sndOh);
         }
 
@@ -310,14 +416,13 @@
             btnCircle.disabled = true;
             btnCross.disabled = true;
 
-            const isMultiple = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
-            let isCorrect = false;
-            if (isMultiple) {
-                isCorrect = (playerChoice === 'circle');
-            } else {
-                isCorrect = (playerChoice === 'cross');
+            const isYesTarget = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
+            const playerAnsweredYes = (playerChoice === 'yes');
+            const isCorrect = (isYesTarget === playerAnsweredYes);
+            
+            if (isCorrect) {
+                correctCount++;
             }
-            if (isCorrect) correctCount++;
 
             animImg.className = '';
             animImg.style.opacity = 0;
@@ -326,7 +431,7 @@
             void animImg.offsetWidth; 
             animImg.classList.add('zoom-anim');
 
-            const choiceAudio = playerChoice === 'circle' ? sndCircle : sndCross;
+            const choiceAudio = playerAnsweredYes ? sndCircle : sndCross;
             await playAudioAsync(choiceAudio);
             await wait(150);
 
@@ -358,7 +463,7 @@
             document.getElementById('result-screen').classList.remove('hidden');
             
             sndHakusyu.currentTime = 0;
-            sndHakusyu.play().catch(e => console.log("Audio play error:", e));
+            sndHakusyu.play().catch(e => {});
             
             const endTime = Date.now();
             const timeMs = Math.max(0, endTime - startTime);
@@ -371,6 +476,9 @@
             const pad = (n) => n.toString().padStart(2, '0');
             const dateStr = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
             
+            const modeText = currentMode === 'pro' ? '【 プロモード 】' : '【 ノーマルモード 】';
+            document.getElementById('res-mode').textContent = modeText;
+            
             document.getElementById('res-correct').textContent = correctCount;
             document.getElementById('res-time').textContent = `${h}時間 ${m}分 ${s}秒`;
             document.getElementById('res-date').textContent = dateStr;
@@ -381,7 +489,8 @@
             };
             
             let isBest = false;
-            const saved = localStorage.getItem('twoOrThreeGameRecord');
+            const recordKey = 'twoOrThreeGameRecord_' + currentMode;
+            const saved = localStorage.getItem(recordKey);
             
             if (saved) {
                 const bestScore = JSON.parse(saved);
@@ -395,7 +504,7 @@
             
             const bestLabel = document.getElementById('best-score-label');
             if (isBest) {
-                localStorage.setItem('twoOrThreeGameRecord', JSON.stringify(currentScore));
+                localStorage.setItem(recordKey, JSON.stringify(currentScore));
                 bestLabel.classList.remove('hidden');
             } else {
                 bestLabel.classList.add('hidden');
@@ -405,6 +514,7 @@
         document.addEventListener('keydown', (e) => {
             if ((e.key === 'd' || e.key === 'D') && !document.getElementById('title-screen').classList.contains('hidden')) {
                 document.getElementById('title-screen').classList.add('hidden');
+                currentMode = 'normal';
                 correctCount = 99; 
                 startTime = Date.now() - (1000 * 60 * 5); 
                 showResult();
