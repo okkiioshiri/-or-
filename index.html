@@ -138,7 +138,7 @@
         #anim-img { opacity: 0; transform: scale(0.1); }
 
         @keyframes zoomIn {
-            0% { opacity: 0; transform: scale(0.1); }
+            0% { opacity: 1; transform: scale(0.1); }
             100% { opacity: 1; transform: scale(1); }
         }
 
@@ -160,7 +160,7 @@
             gap: 40px;
         }
 
-        button {
+                #button-container button {
             width: 100px;
             height: 100px;
             font-size: 28px;
@@ -180,8 +180,8 @@
         #btn-circle { background-color: #ff4d4d; }
         #btn-cross { background-color: #3399ff; }
         
-        button:active { transform: scale(0.9); }
-        button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
+        #button-container button:active { transform: scale(0.9); }
+        #button-container button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
 
         #counter {
             position: absolute;
@@ -201,37 +201,47 @@
         #max-q { font-size: 40px; transform: translateY(35%); margin-left: -0.1em; }
 
         #difficulty-modal {
-            background-color: rgba(0, 0, 0, 0.85);
             z-index: 100;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .modal-content {
+            display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .modal-content {
-            background: #222;
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #fff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .modal-content h2 { color: #fff; margin: 0; font-size: 40px; }
-        .diff-btn-container { display: flex; gap: 30px; }
+        .diff-btn-container { display: flex; gap: 40px; }
+        
         .diff-btn {
-            width: 250px;
-            padding: 20px;
-            border-radius: 10px;
-            flex-direction: column;
-            gap: 10px;
+            width: 300px;
+            height: 120px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.1s;
         }
-        #btn-normal { background-color: #4CAF50; }
-        #btn-pro { background-color: #E91E63; }
-        .diff-title { font-size: 32px; font-weight: bold; }
-        .diff-desc { font-size: 18px; font-weight: normal; }
+        
+        .diff-btn:active { transform: scale(0.95); }
+
+        #btn-normal { background-image: url('images/normal_off.png'); }
+        #btn-normal:hover { background-image: url('images/normal_on.png'); }
+
+        #btn-pro { background-image: url('images/pro_off.png'); }
+        #btn-pro:hover { background-image: url('images/pro_on.png'); }
     </style>
 </head>
 <body>
@@ -247,17 +257,16 @@
         </div>
 
         <div id="difficulty-modal" class="screen hidden">
-            <div class="modal-content">
-                <h2>難易度を選択</h2>
-                <div class="diff-btn-container">
-                    <button id="btn-normal" class="diff-btn" onclick="startMode('normal')">
-                        <span class="diff-title">ノーマル</span>
-                    </button>
-                    <button id="btn-pro" class="diff-btn" onclick="startMode('pro')">
-                        <span class="diff-title">プロ</span>
-                    </button>
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <div class="modal-content">
+                    <div class="diff-btn-container">
+                        <button id="btn-normal" class="diff-btn" onclick="startMode('normal')"></button>
+                        <button id="btn-pro" class="diff-btn" onclick="startMode('pro')"></button>
+                    </div>
                 </div>
             </div>
+            <div class="bottom-ui-area"></div>
         </div>
 
         <div id="game-wrapper" class="screen hidden">
@@ -311,6 +320,9 @@
             maxQuestions: 100,        
             numberMin: 1,             
             numberMax: 99,            
+            
+            delayNextQuestion: 600, 
+            delayAudioOh: 0,      
             
             fileBg: 'images/bg.png',
             fileCorrect: 'images/YES.png',
@@ -400,8 +412,16 @@
                 currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
             }
             
+            if (GAME_CONFIG.delayAudioOh <= 0) {
+                playAudioAsync(sndOh);
+            } else {
+                setTimeout(() => {
+                    playAudioAsync(sndOh);
+                }, GAME_CONFIG.delayAudioOh);
+            }
+
             numberDisplay.textContent = currentNumber;
-            playAudioAsync(sndOh);
+            numberDisplay.classList.remove('hidden');
         }
 
         function updateCounter() {
@@ -414,6 +434,8 @@
             btnCircle.disabled = true;
             btnCross.disabled = true;
 
+            numberDisplay.classList.add('hidden');
+
             const isYesTarget = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
             const playerAnsweredYes = (playerChoice === 'yes');
             const isCorrect = (isYesTarget === playerAnsweredYes);
@@ -423,7 +445,7 @@
             }
 
             animImg.className = '';
-            animImg.style.opacity = 0;
+            animImg.style.opacity = 1; 
             animImg.src = isCorrect ? GAME_CONFIG.fileCorrect : GAME_CONFIG.fileWrong;
 
             void animImg.offsetWidth; 
@@ -437,7 +459,7 @@
 
             await Promise.all([
                 playAudioAsync(resultAudio),
-                wait(1200) 
+                wait(GAME_CONFIG.delayNextQuestion) 
             ]);
 
             animImg.className = '';
