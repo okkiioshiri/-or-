@@ -113,7 +113,7 @@
 
         #screen-area {
             position: relative;
-            background-color: #000; 
+            background-color: #000;
         }
 
         #number-display {
@@ -144,30 +144,30 @@
 
         .zoom-anim {
             width: 100%; height: 100%;
-            object-fit: contain; 
+            object-fit: contain;
             animation: zoomIn 1.5s ease-out forwards;
         }
 
         #ui-area {
             width: 100%;
             display: flex;
-            justify-content: center; 
+            justify-content: center;
             align-items: center;
         }
 
         #button-container {
             display: flex;
-            gap: 40px;
+            gap: 100px;
         }
 
-                #button-container button {
-            width: 100px;
-            height: 100px;
-            font-size: 28px;
+        #button-container button {
+            width: 180px;
+            height: 80px;
+            font-size: 32px;
             font-weight: bold;
             color: #fff;
             border: 4px solid #fff;
-            border-radius: 50%;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -179,14 +179,14 @@
 
         #btn-circle { background-color: #ff4d4d; }
         #btn-cross { background-color: #3399ff; }
-        
+
         #button-container button:active { transform: scale(0.9); }
         #button-container button:disabled { filter: grayscale(80%); cursor: not-allowed; transform: none; }
 
         #counter {
             position: absolute;
-            bottom: 20px; 
-            right: 300px; 
+            bottom: 20px;
+            right: 300px;
             color: #fff;
             z-index: 5;
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
@@ -214,14 +214,8 @@
             z-index: 2;
         }
 
-        .modal-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .diff-btn-container { display: flex; gap: 40px; }
-        
+
         .diff-btn {
             width: 300px;
             height: 120px;
@@ -234,7 +228,7 @@
             background-position: center;
             transition: transform 0.1s;
         }
-        
+
         .diff-btn:active { transform: scale(0.95); }
 
         #btn-normal { background-image: url('images/normal_off.png'); }
@@ -242,18 +236,193 @@
 
         #btn-pro { background-image: url('images/pro_off.png'); }
         #btn-pro:hover { background-image: url('images/pro_on.png'); }
+
+        @keyframes blinkAnim {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .blink-anim {
+            animation: blinkAnim 1.5s infinite ease-in-out;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .menu-btn-container {
+            position: absolute;
+            right: 300px;
+            top: 67%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+        }
+        .menu-btn {
+            width: 250px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .menu-btn:hover { transform: scale(1.05); }
+        .menu-btn:active { transform: scale(0.95); }
+
+        .menu-content-box {
+            position: absolute;
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 50px 80px;
+            border: 4px solid #fff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            font-size: 28px;
+            font-family: 'Comic Sans MS', sans-serif;
+        }
+
+        .sys-btn {
+            width: auto; height: auto;
+            padding: 10px 40px;
+            font-size: 24px;
+            border-radius: 10px;
+            background-color: #555;
+            color: #fff;
+            border: 2px solid #fff;
+            cursor: pointer;
+        }
+        .sys-btn:active { transform: scale(0.95); }
+
+        .tutorial-content {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            z-index: 2;
+        }
+        .tutorial-title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 48px;
+            letter-spacing: 10px;
+            z-index: 3;
+            font-family: 'Hiragino Maru Gothic ProN', 'HG丸ゴシックM-PRO', 'ヒラギノ丸ゴ ProN', 'メイリオ', Meiryo, sans-serif;
+        }
+        .tutorial-left {
+            position: absolute;
+            left: 0; top: 0;
+            width: 50%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        .tutorial-right {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 48px;
+            line-height: 1.6;
+            text-align: center;
+            padding-left: 300px;
+            margin-top: 80px;
+            font-family: 'Hiragino Maru Gothic ProN', 'HG丸ゴシックM-PRO', 'ヒラギノ丸ゴ ProN', 'メイリオ', Meiryo, sans-serif;
+        }
+        .dummy-btn {
+            width: 180px; height: 80px;
+            font-size: 32px; font-weight: bold; color: #fff;
+            border: 4px solid #fff; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center;
+            padding-bottom: 4px; box-sizing: border-box;
+            font-family: 'Hiragino Maru Gothic ProN', 'HG丸ゴシックM-PRO', 'ヒラギノ丸ゴ ProN', 'メイリオ', Meiryo, sans-serif;
+        }
     </style>
 </head>
 <body>
 
     <div id="app">
-        <div id="title-screen" class="screen" onclick="showDifficultyModal()">
+        <div id="title-screen" class="screen" onclick="showLoadingScreen()">
             <div class="top-img-area">
                 <img src="images/title.png" class="screen-bg" alt="タイトル">
             </div>
             <div class="bottom-ui-area">
                 <div id="start-text">CLICK TO START</div>
             </div>
+        </div>
+
+        <div id="loading-screen" class="screen hidden">
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <div class="modal-content">
+                    <img src="images/loading.png" class="blink-anim" alt="Loading">
+                </div>
+            </div>
+            <div class="bottom-ui-area"></div>
+        </div>
+
+        <div id="menu-screen" class="screen hidden">
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <img src="images/menu.png" class="screen-bg" alt="メニュー" style="position: absolute; top: 0; left: 0; z-index: 1;">
+                <div class="menu-btn-container">
+                    <img src="images/play.png" class="menu-btn" onclick="showTutorial()" alt="Play">
+                    <img src="images/record.png" class="menu-btn" onclick="showRecordList()" alt="Record">
+                    <img src="images/word.png" class="menu-btn" onclick="toggleLanguage()" alt="Word">
+                    <img src="images/setting.png" class="menu-btn" onclick="showSetting()" alt="Setting">
+                </div>
+            </div>
+            <div class="bottom-ui-area"></div>
+        </div>
+
+        <div id="record-list-screen" class="screen hidden">
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <div class="menu-content-box">
+                    <h2 style="margin: 0 0 20px 0; color: #ffeb3b;">YOUR RECORDS</h2>
+                    <div id="record-text-normal">Normal Mode: No Data</div>
+                    <div id="record-text-pro">Pro Mode: No Data</div>
+                    <button class="sys-btn" style="margin-top: 30px;" onclick="backToMenu('record-list-screen')">BACK</button>
+                </div>
+            </div>
+            <div class="bottom-ui-area"></div>
+        </div>
+
+        <div id="setting-screen" class="screen hidden">
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <div class="menu-content-box">
+                    <h2 style="margin: 0 0 20px 0; color: #ffeb3b;">SETTING</h2>
+                    <label>Volume: <span id="vol-disp">100</span>%</label>
+                    <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)" style="width: 300px; height: 20px;">
+                    <button class="sys-btn" style="margin-top: 30px;" onclick="backToMenu('setting-screen')">BACK</button>
+                </div>
+            </div>
+            <div class="bottom-ui-area"></div>
+        </div>
+
+        <div id="tutorial-screen" class="screen hidden" onclick="nextTutorial()" style="cursor: pointer;">
+            <div class="top-img-area">
+                <img src="images/bg.png" class="screen-bg" alt="背景">
+                <div class="tutorial-title">チュートリアル</div>
+                <div class="tutorial-content">
+                    <div class="tutorial-left">
+                        <div class="dummy-btn" style="background-color: #ff4d4d;">はい</div>
+                        <div class="dummy-btn" style="background-color: #3399ff;">いいえ</div>
+                    </div>
+                    <div class="tutorial-right">
+                        <div id="tutorial-text">２か３の倍数なら<br>はい</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-ui-area"></div>
         </div>
 
         <div id="difficulty-modal" class="screen hidden">
@@ -273,22 +442,19 @@
             <div class="top-img-area" id="screen-area">
                 <img id="bg-image" src="" alt="背景">
                 <div id="number-display">--</div>
-                
                 <div id="anim-container">
                     <img id="anim-img" src="" alt="">
                 </div>
-
                 <div id="counter">
                     <span id="current-q">1</span>
                     <span class="slash">/</span>
                     <span id="max-q">100</span>
                 </div>
             </div>
-
             <div class="bottom-ui-area" id="ui-area">
                 <div id="button-container">
-                    <button id="btn-circle" onclick="answer('yes')">YES</button>
-                    <button id="btn-cross" onclick="answer('no')">NO</button>
+                    <button id="btn-circle" onclick="answer('yes')">はい</button>
+                    <button id="btn-cross" onclick="answer('no')">いいえ</button>
                 </div>
             </div>
         </div>
@@ -317,17 +483,14 @@
         document.addEventListener('DOMContentLoaded', resizeApp);
 
         const GAME_CONFIG = {
-            maxQuestions: 100,        
-            numberMin: 1,             
-            numberMax: 99,            
-            
-            delayNextQuestion: 600, 
-            delayAudioOh: 0,      
-            
+            maxQuestions: 100,
+            numberMin: 1,
+            numberMax: 99,
+            delayNextQuestion: 600,
+            delayAudioOh: 0,
             fileBg: 'images/bg.png',
             fileCorrect: 'images/YES.png',
             fileWrong: 'images/NO.png',
-            
             audioOh: 'sounds/Oh.mp3',
             audioCircle: 'sounds/YES.mp3',
             audioCross: 'sounds/NO.mp3',
@@ -338,11 +501,19 @@
 
         let currentQuestion = 1;
         let currentNumber = 0;
-        let isAnimating = false; 
-        
+        let isAnimating = false;
+
         let correctCount = 0;
         let startTime = 0;
         let currentMode = 'normal';
+        let currentLanguage = 'ja';
+
+        let currentTutorialStep = 0;
+        const tutorialTexts = [
+            "２か３の倍数なら<br>はい",
+            "２か３の倍数<br>じゃないなら<br>いいえ",
+            "100回カウントしたら<br>ゲームクリアだよ、<br>レッツスタート"
+        ];
 
         const currentQText = document.getElementById('current-q');
         const maxQText = document.getElementById('max-q');
@@ -350,7 +521,7 @@
         const animImg = document.getElementById('anim-img');
         const btnCircle = document.getElementById('btn-circle');
         const btnCross = document.getElementById('btn-cross');
-        
+
         document.getElementById('bg-image').src = GAME_CONFIG.fileBg;
         maxQText.textContent = GAME_CONFIG.maxQuestions;
 
@@ -360,6 +531,12 @@
         const sndCorrect = new Audio(GAME_CONFIG.audioCorrect);
         const sndWrong = new Audio(GAME_CONFIG.audioWrong);
         const sndHakusyu = new Audio(GAME_CONFIG.audioHakusyu);
+        const sndDecide = new Audio('sounds/決定音.mp3');
+
+        function playDecide() {
+            sndDecide.currentTime = 0;
+            sndDecide.play().catch(e => {});
+        }
 
         function wait(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
@@ -369,27 +546,105 @@
             return new Promise(resolve => {
                 audioObj.currentTime = 0;
                 audioObj.onended = resolve;
-                audioObj.play().catch(e => {
-                    resolve();
-                });
+                audioObj.play().catch(e => { resolve(); });
             });
         }
 
-        function showDifficultyModal() {
+        function showLoadingScreen() {
+            playDecide();
             document.getElementById('title-screen').onclick = null;
+            document.getElementById('title-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('menu-screen').classList.remove('hidden');
+            }, 5000);
+        }
+
+        function showTutorial() {
+            playDecide();
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('tutorial-screen').classList.remove('hidden');
+            currentTutorialStep = 0;
+            document.getElementById('tutorial-text').innerHTML = tutorialTexts[currentTutorialStep];
+        }
+
+        function nextTutorial() {
+            playDecide();
+            currentTutorialStep++;
+            if (currentTutorialStep >= tutorialTexts.length) {
+                showDifficultyModal();
+            } else {
+                document.getElementById('tutorial-text').innerHTML = tutorialTexts[currentTutorialStep];
+            }
+        }
+
+        function showDifficultyModal() {
+            document.getElementById('tutorial-screen').classList.add('hidden');
+            document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('difficulty-modal').classList.remove('hidden');
         }
 
+        function showRecordList() {
+            playDecide();
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('record-list-screen').classList.remove('hidden');
+
+            const normData = JSON.parse(localStorage.getItem('twoOrThreeGameRecord_normal'));
+            const proData = JSON.parse(localStorage.getItem('twoOrThreeGameRecord_pro'));
+
+            const msToTime = (ms) => {
+                const s = Math.floor((ms / 1000) % 60);
+                const m = Math.floor((ms / (1000 * 60)) % 60);
+                return `${m}m ${s}s`;
+            };
+
+            document.getElementById('record-text-normal').textContent = normData ? `Normal: ${normData.correct} correct / ${msToTime(normData.time)}` : 'Normal: No Data';
+            document.getElementById('record-text-pro').textContent = proData ? `Pro: ${proData.correct} correct / ${msToTime(proData.time)}` : 'Pro: No Data';
+        }
+
+        function showSetting() {
+            playDecide();
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('setting-screen').classList.remove('hidden');
+        }
+
+        function backToMenu(currentScreenId) {
+            playDecide();
+            document.getElementById(currentScreenId).classList.add('hidden');
+            document.getElementById('menu-screen').classList.remove('hidden');
+        }
+
+        function changeVolume(val) {
+            document.getElementById('vol-disp').textContent = val;
+            const volumeFloat = val / 100;
+            sndOh.volume = volumeFloat;
+            sndCircle.volume = volumeFloat;
+            sndCross.volume = volumeFloat;
+            sndCorrect.volume = volumeFloat;
+            sndWrong.volume = volumeFloat;
+            sndHakusyu.volume = volumeFloat;
+            sndDecide.volume = volumeFloat;
+        }
+
+        function toggleLanguage() {
+            playDecide();
+            currentLanguage = (currentLanguage === 'ja') ? 'en' : 'ja';
+            alert(currentLanguage === 'en' ? 'Language changed to English!' : '日本語に変更しました！');
+        }
+
         async function startMode(mode) {
+            playDecide();
             currentMode = mode;
             document.getElementById('difficulty-modal').classList.add('hidden');
+            document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('title-screen').classList.add('hidden');
             document.getElementById('game-wrapper').classList.remove('hidden');
-            
+
             currentQuestion = 1;
             correctCount = 0;
             startTime = Date.now();
-            
+
             updateCounter();
             generateNumber();
         }
@@ -411,13 +666,11 @@
                 const max = GAME_CONFIG.numberMax;
                 currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
             }
-            
+
             if (GAME_CONFIG.delayAudioOh <= 0) {
                 playAudioAsync(sndOh);
             } else {
-                setTimeout(() => {
-                    playAudioAsync(sndOh);
-                }, GAME_CONFIG.delayAudioOh);
+                setTimeout(() => { playAudioAsync(sndOh); }, GAME_CONFIG.delayAudioOh);
             }
 
             numberDisplay.textContent = currentNumber;
@@ -429,7 +682,7 @@
         }
 
         async function answer(playerChoice) {
-            if (isAnimating) return; 
+            if (isAnimating) return;
             isAnimating = true;
             btnCircle.disabled = true;
             btnCross.disabled = true;
@@ -439,16 +692,14 @@
             const isYesTarget = (currentNumber % 2 === 0 || currentNumber % 3 === 0);
             const playerAnsweredYes = (playerChoice === 'yes');
             const isCorrect = (isYesTarget === playerAnsweredYes);
-            
-            if (isCorrect) {
-                correctCount++;
-            }
+
+            if (isCorrect) { correctCount++; }
 
             animImg.className = '';
-            animImg.style.opacity = 1; 
+            animImg.style.opacity = 1;
             animImg.src = isCorrect ? GAME_CONFIG.fileCorrect : GAME_CONFIG.fileWrong;
 
-            void animImg.offsetWidth; 
+            void animImg.offsetWidth;
             animImg.classList.add('zoom-anim');
 
             const choiceAudio = playerAnsweredYes ? sndCircle : sndCross;
@@ -459,7 +710,7 @@
 
             await Promise.all([
                 playAudioAsync(resultAudio),
-                wait(GAME_CONFIG.delayNextQuestion) 
+                wait(GAME_CONFIG.delayNextQuestion)
             ]);
 
             animImg.className = '';
@@ -469,7 +720,6 @@
                 currentQuestion++;
                 updateCounter();
                 generateNumber();
-                
                 isAnimating = false;
                 btnCircle.disabled = false;
                 btnCross.disabled = false;
@@ -481,47 +731,44 @@
         function showResult() {
             document.getElementById('game-wrapper').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
-            
+
             sndHakusyu.currentTime = 0;
             sndHakusyu.play().catch(e => {});
-            
+
             const endTime = Date.now();
             const timeMs = Math.max(0, endTime - startTime);
-            
+
             const h = Math.floor(timeMs / (1000 * 60 * 60));
             const m = Math.floor((timeMs % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((timeMs % (1000 * 60)) / 1000);
-            
+
             const now = new Date();
             const pad = (n) => n.toString().padStart(2, '0');
             const dateStr = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-            
+
             const modeText = currentMode === 'pro' ? '【 プロモード 】' : '【 ノーマルモード 】';
             document.getElementById('res-mode').textContent = modeText;
-            
+
             document.getElementById('res-correct').textContent = correctCount;
             document.getElementById('res-time').textContent = `${h}時間 ${m}分 ${s}秒`;
             document.getElementById('res-date').textContent = dateStr;
-            
-            const currentScore = {
-                correct: correctCount,
-                time: timeMs
-            };
-            
+
+            const currentScore = { correct: correctCount, time: timeMs };
+
             let isBest = false;
             const recordKey = 'twoOrThreeGameRecord_' + currentMode;
             const saved = localStorage.getItem(recordKey);
-            
+
             if (saved) {
                 const bestScore = JSON.parse(saved);
-                if (currentScore.correct > bestScore.correct || 
+                if (currentScore.correct > bestScore.correct ||
                    (currentScore.correct === bestScore.correct && currentScore.time < bestScore.time)) {
                     isBest = true;
                 }
             } else {
                 isBest = true;
             }
-            
+
             const bestLabel = document.getElementById('best-score-label');
             if (isBest) {
                 localStorage.setItem(recordKey, JSON.stringify(currentScore));
@@ -535,8 +782,8 @@
             if ((e.key === 'd' || e.key === 'D') && !document.getElementById('title-screen').classList.contains('hidden')) {
                 document.getElementById('title-screen').classList.add('hidden');
                 currentMode = 'normal';
-                correctCount = 99; 
-                startTime = Date.now() - (1000 * 60 * 5); 
+                correctCount = 99;
+                startTime = Date.now() - (1000 * 60 * 5);
                 showResult();
             }
         });
